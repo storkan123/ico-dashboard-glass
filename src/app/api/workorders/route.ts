@@ -4,9 +4,9 @@ import { WorkOrder } from "@/app/lib/types";
 
 export const dynamic = "force-dynamic";
 
-const N8N_API_URL = process.env.N8N_API_URL || "https://jian123.app.n8n.cloud";
-const N8N_API_KEY = process.env.N8N_API_KEY || "";
-const WORKFLOW_ID = process.env.N8N_WORKFLOW_ID || "icAAQUI5JFUGFFkd";
+const N8N_API_URL = (process.env.N8N_API_URL || "https://jian123.app.n8n.cloud").trim();
+const N8N_API_KEY = (process.env.N8N_API_KEY || "").trim();
+const WORKFLOW_ID = (process.env.N8N_WORKFLOW_ID || "icAAQUI5JFUGFFkd").trim();
 
 interface ExecutionItem {
   json: Record<string, unknown>;
