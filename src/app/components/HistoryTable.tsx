@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { WorkOrder, STAGE_CONFIG } from "@/app/lib/types";
+import { formatDate } from "@/app/lib/utils";
 
 type SortKey =
   | "work_request_number"
@@ -246,7 +247,7 @@ export default function HistoryTable({
                         {wo.Vendor || "—"}
                       </td>
                       <td className="px-4 py-3" style={{ color: "var(--text-secondary)" }}>
-                        {wo["Date of Job"] || "—"}
+                        {wo["Date of Job"] ? formatDate(wo["Date of Job"]) : "—"}
                       </td>
                       <td className="px-4 py-3">
                         <span

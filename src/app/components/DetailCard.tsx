@@ -1,4 +1,5 @@
 import { WorkOrder, STAGE_CONFIG } from "@/app/lib/types";
+import { formatDate } from "@/app/lib/utils";
 import CollapsibleSection from "./CollapsibleSection";
 
 function Field({ label, value }: { label: string; value: string }) {
@@ -59,7 +60,7 @@ export default function DetailCard({ wo }: { wo: WorkOrder }) {
               WR# {wo.work_request_number} — {wo.property_name}
             </h2>
             <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
-              Created: {wo.work_request_date || "Unknown"}
+              Created: {formatDate(wo.work_request_date) || "Unknown"}
             </p>
           </div>
           <span

@@ -1,7 +1,26 @@
+/** Convert Excel serial number (e.g. 46037) or date string to a Date */
+function parseDate(dateStr: string): Date | null {
+  if (!dateStr) return null;
+  const num = Number(dateStr);
+  if (!isNaN(num) && num > 10000 && num < 100000) {
+    // Excel serial date: days since 1899-12-30
+    const ms = (num - 25569) * 86400000;
+    return new Date(ms);
+  }
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+export function formatDate(dateStr: string): string {
+  const d = parseDate(dateStr);
+  if (!d) return dateStr || "";
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
 export function timeAgo(dateStr: string): string {
   if (!dateStr) return "";
-  const date = new Date(dateStr);
-  if (isNaN(date.getTime())) return dateStr;
+  const date = parseDate(dateStr);
+  if (!date) return dateStr;
 
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
