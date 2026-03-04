@@ -27,13 +27,37 @@ export interface WorkOrder {
   stage: Stage;
 }
 
+export type StepColor = "amber" | "red" | "blue" | "violet" | "rose" | "emerald";
+
 export interface Step {
   label: string;
   description: string;
   completed: boolean;
   current: boolean;
+  skipped?: boolean;
+  color: StepColor;
   detail?: string;
 }
+
+export const STEP_COLORS: Record<StepColor, { accent: string; bg: string; glow: string; border: string }> = {
+  amber:   { accent: "var(--accent-amber)",   bg: "var(--stage-awaiting-bg)",    glow: "0 0 12px rgba(251, 191, 36, 0.4)",  border: "var(--stage-awaiting-border)" },
+  red:     { accent: "var(--accent-red)",     bg: "var(--stage-emergency-bg)",   glow: "0 0 12px rgba(248, 113, 113, 0.4)", border: "var(--stage-emergency-border)" },
+  blue:    { accent: "var(--accent-blue)",    bg: "var(--stage-triaged-bg)",     glow: "0 0 12px rgba(96, 165, 250, 0.4)",  border: "var(--stage-triaged-border)" },
+  violet:  { accent: "var(--accent-violet)",  bg: "var(--stage-scheduled-bg)",   glow: "0 0 12px rgba(167, 139, 250, 0.4)", border: "var(--stage-scheduled-border)" },
+  rose:    { accent: "var(--accent-rose)",    bg: "var(--stage-incomplete-bg)",  glow: "0 0 12px rgba(251, 113, 133, 0.4)", border: "var(--stage-incomplete-border)" },
+  emerald: { accent: "var(--accent-emerald)", bg: "var(--stage-complete-bg)",    glow: "0 0 12px rgba(52, 211, 153, 0.4)",  border: "var(--stage-complete-border)" },
+};
+
+export type SectionTheme = "blue" | "violet" | "amber" | "emerald" | "red" | "rose";
+
+export const SECTION_THEMES: Record<SectionTheme, { accent: string; bg: string; border: string }> = {
+  blue:    { accent: "var(--accent-blue)",    bg: "var(--stage-triaged-bg)",    border: "var(--stage-triaged-border)" },
+  violet:  { accent: "var(--accent-violet)",  bg: "var(--stage-scheduled-bg)",  border: "var(--stage-scheduled-border)" },
+  amber:   { accent: "var(--accent-amber)",   bg: "var(--stage-awaiting-bg)",   border: "var(--stage-awaiting-border)" },
+  emerald: { accent: "var(--accent-emerald)", bg: "var(--stage-complete-bg)",   border: "var(--stage-complete-border)" },
+  red:     { accent: "var(--accent-red)",     bg: "var(--stage-emergency-bg)",  border: "var(--stage-emergency-border)" },
+  rose:    { accent: "var(--accent-rose)",    bg: "var(--stage-incomplete-bg)", border: "var(--stage-incomplete-border)" },
+};
 
 export const STAGE_CONFIG: Record<
   Stage,

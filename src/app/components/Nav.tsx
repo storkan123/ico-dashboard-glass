@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const links = [
@@ -20,15 +21,13 @@ export default function Nav() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-3">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm"
-                style={{
-                  background: "var(--accent-blue)",
-                  color: "#ffffff",
-                }}
-              >
-                ICO
-              </div>
+              <Image
+                src="/ico-logo.avif"
+                alt="ICO"
+                width={32}
+                height={32}
+                className="rounded-lg"
+              />
               <span
                 className="text-lg font-semibold hidden sm:block"
                 style={{ color: "var(--text-primary)" }}

@@ -48,7 +48,7 @@ export default function DetailCard({ wo }: { wo: WorkOrder }) {
         style={{
           background: "var(--bg-card)",
           borderColor: "var(--border-card)",
-          boxShadow: "var(--shadow-card)",
+          boxShadow: `var(--shadow-card), 0 0 40px var(--stage-${stageKey}-bg)`,
         }}
       >
         <div className="flex items-start justify-between mb-2">
@@ -89,21 +89,21 @@ export default function DetailCard({ wo }: { wo: WorkOrder }) {
       </div>
 
       {/* Property Info */}
-      <CollapsibleSection title="Property Info">
+      <CollapsibleSection title="Property Info" theme="blue">
         <Field label="Property" value={wo.property_name} />
         <Field label="Address" value={wo.property_address} />
         <Field label="Unit" value={wo.unit} />
       </CollapsibleSection>
 
       {/* Resident Info */}
-      <CollapsibleSection title="Resident Info">
+      <CollapsibleSection title="Resident Info" theme="violet">
         <Field label="Name" value={wo.resident_name} />
         <Field label="Phone" value={wo.resident_phone} />
         <Field label="Email" value={wo.resident_email} />
       </CollapsibleSection>
 
       {/* Work Request */}
-      <CollapsibleSection title="Work Request">
+      <CollapsibleSection title="Work Request" theme="amber">
         <Field label="Description" value={wo.work_request_description} />
         <Field
           label="Emergency"
@@ -116,6 +116,7 @@ export default function DetailCard({ wo }: { wo: WorkOrder }) {
       {/* Email Sent to Tenant */}
       <CollapsibleSection
         title="Email Sent to Tenant"
+        theme="blue"
         defaultOpen={false}
         isEmpty={!wo.Initial_Reachout.trim()}
       >
@@ -125,6 +126,7 @@ export default function DetailCard({ wo }: { wo: WorkOrder }) {
       {/* Tenant Response */}
       <CollapsibleSection
         title="Tenant Response"
+        theme="emerald"
         defaultOpen={false}
         isEmpty={!wo["Initial Tenet Email Response"].trim()}
       >
@@ -134,6 +136,7 @@ export default function DetailCard({ wo }: { wo: WorkOrder }) {
       {/* Assignment */}
       <CollapsibleSection
         title="Assignment"
+        theme="rose"
         isEmpty={!wo.Vendor.trim()}
       >
         <Field label="Vendor" value={wo.Vendor || "Not yet assigned"} />
@@ -141,7 +144,7 @@ export default function DetailCard({ wo }: { wo: WorkOrder }) {
       </CollapsibleSection>
 
       {/* Status */}
-      <CollapsibleSection title="Status">
+      <CollapsibleSection title="Status" theme="emerald">
         <Field
           label="Completed"
           value={wo["Completed?"].trim() || "Pending..."}

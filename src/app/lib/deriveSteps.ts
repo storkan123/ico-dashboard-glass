@@ -7,6 +7,7 @@ export function deriveSteps(wo: WorkOrder): Step[] {
       description: "Work order submitted via email",
       completed: !!wo.work_request_date.trim(),
       current: false,
+      color: "amber",
       detail: wo.work_request_date,
     },
     {
@@ -14,6 +15,7 @@ export function deriveSteps(wo: WorkOrder): Step[] {
       description: "AI analyzed and classified the request",
       completed: wo.is_emergency.trim() !== "",
       current: false,
+      color: "red",
       detail: wo.is_emergency.trim()
         ? `Emergency: ${wo.is_emergency}`
         : undefined,
@@ -23,6 +25,7 @@ export function deriveSteps(wo: WorkOrder): Step[] {
       description: "Initial outreach email sent to tenant",
       completed: !!wo.Initial_Reachout.trim(),
       current: false,
+      color: "blue",
       detail: wo["Initial Tenet Email Response"].trim() || undefined,
     },
     {
@@ -30,6 +33,7 @@ export function deriveSteps(wo: WorkOrder): Step[] {
       description: "Maintenance vendor assigned to the job",
       completed: !!wo.Vendor.trim(),
       current: false,
+      color: "violet",
       detail: wo.Vendor.trim() || undefined,
     },
     {
@@ -37,6 +41,7 @@ export function deriveSteps(wo: WorkOrder): Step[] {
       description: "Job date and time confirmed",
       completed: !!wo["Date of Job"].trim(),
       current: false,
+      color: "rose",
       detail: wo["Date of Job"].trim() || undefined,
     },
     {
@@ -46,20 +51,38 @@ export function deriveSteps(wo: WorkOrder): Step[] {
         wo["Completed?"].trim().toLowerCase() === "complete" ||
         wo["Completed?"].trim().toLowerCase() === "incomplete",
       current: false,
+      color: "emerald",
       detail: wo["Completed?"].trim() || undefined,
     },
   ];
 
-  // Mark the current step (first incomplete step)
-  let foundCurrent = false;
-  for (let i = 0; i < steps.length; i++) {
-    if (!steps[i].completed && !foundCurrent) {
-      steps[i].current = true;
-      foundCurrent = true;
+  // Find the last completed step
+  let lastCompletedIndex = -1;
+  for (let i = steps.length - 1; i >= 0; i--) {
+    if (steps[i].completed) {
+      lastCompletedIndex = i;
+      break;
     }
   }
 
-  // If all completed, mark last as current
+  // Mark incomplete steps before the last completed as "skipped"
+  for (let i = 0; i < lastCompletedIndex; i++) {
+    if (!steps[i].completed) {
+      steps[i].skipped = true;
+    }
+  }
+
+  // Mark current = first incomplete step after last completed
+  let foundCurrent = false;
+  for (let i = lastCompletedIndex + 1; i < steps.length; i++) {
+    if (!steps[i].completed) {
+      steps[i].current = true;
+      foundCurrent = true;
+      break;
+    }
+  }
+
+  // If all completed, mark the last step as current
   if (!foundCurrent && steps.length > 0) {
     steps[steps.length - 1].current = true;
   }
