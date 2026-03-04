@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 const N8N_API_URL = (process.env.N8N_API_URL || "https://jian123.app.n8n.cloud").trim();
 const N8N_API_KEY = (process.env.N8N_API_KEY || "").trim();
 const WORKFLOW_ID = (process.env.N8N_WORKFLOW_ID || "icAAQUI5JFUGFFkd").trim();
+const MAIN_WORKFLOW_ID = (process.env.N8N_MAIN_WORKFLOW_ID || "kdSdMKXKWdAugEAVyRI2f").trim();
 
 interface ExecutionItem {
   json: Record<string, unknown>;
@@ -108,7 +109,7 @@ export async function GET() {
       data: workOrders,
       meta: {
         executionId,
-        workflowId: WORKFLOW_ID,
+        workflowId: MAIN_WORKFLOW_ID,
         n8nUrl: N8N_API_URL,
       },
     });

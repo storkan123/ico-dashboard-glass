@@ -102,8 +102,8 @@ export default function WorkOrderDetailPage() {
   }
 
   const steps = deriveSteps(workOrder);
-  const n8nExecutionUrl = meta
-    ? `${meta.n8nUrl}/workflow/${meta.workflowId}/executions/${meta.executionId}`
+  const n8nWorkflowUrl = meta
+    ? `${meta.n8nUrl}/workflow/${meta.workflowId}/executions`
     : null;
 
   return (
@@ -126,9 +126,9 @@ export default function WorkOrderDetailPage() {
           Back to Active Work Orders
         </Link>
 
-        {n8nExecutionUrl && (
+        {n8nWorkflowUrl && (
           <a
-            href={n8nExecutionUrl}
+            href={n8nWorkflowUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg transition-colors glass-card"
