@@ -14,20 +14,25 @@ export default function Nav() {
 
   return (
     <nav
-      className="border-b border-border-primary backdrop-blur-sm"
-      style={{ background: "var(--bg-nav)" }}
+      className="border-b backdrop-blur-xl sticky top-0 z-50"
+      style={{
+        background: "rgba(11, 15, 26, 0.85)",
+        borderColor: "rgba(255, 255, 255, 0.08)",
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-3">
-              <Image
-                src="/ico-logo.avif"
-                alt="ICO"
-                width={32}
-                height={32}
-                className="rounded-lg"
-              />
+              <div className="w-9 h-9 rounded-lg overflow-hidden bg-white/90 p-0.5 flex items-center justify-center">
+                <Image
+                  src="/ico-logo.avif"
+                  alt="ICO"
+                  width={32}
+                  height={32}
+                  className="rounded-md"
+                />
+              </div>
               <span
                 className="text-lg font-semibold hidden sm:block"
                 style={{ color: "var(--text-primary)" }}
@@ -48,10 +53,10 @@ export default function Nav() {
                     className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                     style={{
                       background: isActive
-                        ? "var(--stage-triaged-bg)"
+                        ? "rgba(52, 211, 153, 0.12)"
                         : "transparent",
                       color: isActive
-                        ? "var(--accent-blue)"
+                        ? "var(--accent-emerald)"
                         : "var(--text-muted)",
                     }}
                   >

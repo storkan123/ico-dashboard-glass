@@ -30,7 +30,12 @@ interface ExecutionListItem {
   mode: string;
 }
 
-async function fetchFromExecutions(): Promise<Record<string, unknown>[]> {
+interface FetchResult {
+  rows: Record<string, unknown>[];
+  executionId: string;
+}
+
+async function fetchFromExecutions(): Promise<FetchResult> {
   const listUrl = `${N8N_API_URL}/api/v1/executions?workflowId=${WORKFLOW_ID}&limit=1&status=success`;
   const listRes = await fetch(listUrl, {
     headers: { "X-N8N-API-KEY": N8N_API_KEY },
@@ -57,7 +62,10 @@ async function fetchFromExecutions(): Promise<Record<string, unknown>[]> {
   const excelNode = runData["Get All Work Orders"];
   if (!excelNode?.[0]?.data?.main?.[0]) throw new Error("No Excel data in execution");
 
-  return excelNode[0].data.main[0].map((item) => item.json);
+  return {
+    rows: excelNode[0].data.main[0].map((item) => item.json),
+    executionId: latest.id,
+  };
 }
 
 export async function GET() {
@@ -69,7 +77,7 @@ export async function GET() {
   }
 
   try {
-    const rows = await fetchFromExecutions();
+    const { rows, executionId } = await fetchFromExecutions();
 
     const workOrders: WorkOrder[] = rows
       .filter((row) => String(row.work_request_number ?? "").trim() !== "")
@@ -95,7 +103,15 @@ export async function GET() {
         stage: deriveStage(row),
       }));
 
-    return NextResponse.json({ success: true, data: workOrders });
+    return NextResponse.json({
+      success: true,
+      data: workOrders,
+      meta: {
+        executionId,
+        workflowId: WORKFLOW_ID,
+        n8nUrl: N8N_API_URL,
+      },
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(

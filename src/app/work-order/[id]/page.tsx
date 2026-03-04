@@ -8,10 +8,17 @@ import { deriveSteps } from "@/app/lib/deriveSteps";
 import StepTracker from "@/app/components/StepTracker";
 import DetailCard from "@/app/components/DetailCard";
 
+interface ApiMeta {
+  executionId: string;
+  workflowId: string;
+  n8nUrl: string;
+}
+
 export default function WorkOrderDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const [workOrder, setWorkOrder] = useState<WorkOrder | null>(null);
+  const [meta, setMeta] = useState<ApiMeta | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,6 +32,7 @@ export default function WorkOrderDetailPage() {
         );
         if (found) {
           setWorkOrder(found);
+          setMeta(json.meta || null);
           setError(null);
         } else {
           setError(`Work order #${id} not found`);
@@ -65,7 +73,7 @@ export default function WorkOrderDetailPage() {
         <Link
           href="/"
           className="inline-flex items-center gap-1 text-sm mb-6 transition-colors"
-          style={{ color: "var(--accent-blue)" }}
+          style={{ color: "var(--accent-emerald)" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path
@@ -94,25 +102,51 @@ export default function WorkOrderDetailPage() {
   }
 
   const steps = deriveSteps(workOrder);
+  const n8nExecutionUrl = meta
+    ? `${meta.n8nUrl}/workflow/${meta.workflowId}/executions/${meta.executionId}`
+    : null;
 
   return (
     <div>
-      <Link
-        href="/"
-        className="inline-flex items-center gap-1 text-sm mb-6 transition-colors"
-        style={{ color: "var(--accent-blue)" }}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path
-            d="M10 12L6 8L10 4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        Back to Active Work Orders
-      </Link>
+      <div className="flex items-center justify-between mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-sm transition-colors"
+          style={{ color: "var(--accent-emerald)" }}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M10 12L6 8L10 4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Back to Active Work Orders
+        </Link>
+
+        {n8nExecutionUrl && (
+          <a
+            href={n8nExecutionUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg transition-colors glass-card"
+            style={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-card)",
+              color: "var(--text-muted)",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            View in n8n
+          </a>
+        )}
+      </div>
 
       <StepTracker steps={steps} />
       <DetailCard wo={workOrder} />
