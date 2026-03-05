@@ -107,11 +107,11 @@ export default function WorkOrderDetailPage() {
     : null;
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="animate-fade-in-up">
+      <div className="flex items-center justify-between mb-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-1 text-sm transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm font-medium transition-all hover:gap-2.5"
           style={{ color: "var(--accent-emerald)" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -131,7 +131,7 @@ export default function WorkOrderDetailPage() {
             href={n8nWorkflowUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg transition-colors glass-card"
+            className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg glass-card card-hover"
             style={{
               background: "var(--bg-card)",
               border: "1px solid var(--border-card)",

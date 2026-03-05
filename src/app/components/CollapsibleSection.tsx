@@ -21,7 +21,7 @@ export default function CollapsibleSection({
 
   return (
     <div
-      className="rounded-lg border glass-card overflow-hidden"
+      className="rounded-xl border glass-card overflow-hidden card-hover"
       style={{
         background: "var(--bg-card)",
         borderColor: "var(--border-card)",
@@ -30,9 +30,12 @@ export default function CollapsibleSection({
     >
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left"
+        className="w-full flex items-center justify-between px-5 py-4 text-left transition-colors"
+        style={{
+          background: open && colors ? `linear-gradient(90deg, ${colors.bg} 0%, transparent 40%)` : undefined,
+        }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           {colors && (
             <span
               className="w-2 h-2 rounded-full flex-shrink-0"
@@ -40,7 +43,7 @@ export default function CollapsibleSection({
             />
           )}
           <span
-            className="text-sm font-semibold"
+            className="text-sm font-semibold tracking-tight"
             style={{ color: "var(--text-primary)" }}
           >
             {title}
@@ -49,7 +52,7 @@ export default function CollapsibleSection({
         <div className="flex items-center gap-2">
           {isEmpty && (
             <span
-              className="text-xs px-2 py-0.5 rounded-full"
+              className="text-[10px] font-medium px-2 py-0.5 rounded-full uppercase tracking-wide"
               style={{
                 background: colors ? colors.bg : "var(--bg-secondary)",
                 color: colors ? colors.accent : "var(--text-dim)",
@@ -64,8 +67,11 @@ export default function CollapsibleSection({
             height="16"
             viewBox="0 0 16 16"
             fill="none"
-            className={`transition-transform ${open ? "rotate-180" : ""}`}
-            style={{ color: "var(--text-muted)" }}
+            className="transition-transform duration-200"
+            style={{
+              color: "var(--text-muted)",
+              transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            }}
           >
             <path
               d="M4 6L8 10L12 6"
@@ -79,10 +85,10 @@ export default function CollapsibleSection({
       </button>
       {open && (
         <div
-          className="px-4 pb-4 border-t"
+          className="px-5 pb-5 border-t section-content-enter"
           style={{ borderColor: "var(--border-primary)" }}
         >
-          <div className="pt-3">{children}</div>
+          <div className="pt-4">{children}</div>
         </div>
       )}
     </div>
