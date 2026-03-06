@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { WorkOrder } from "@/app/lib/types";
 import StatsBar from "@/app/components/StatsBar";
 import KanbanBoard from "@/app/components/KanbanBoard";
+import ExecutionCounter from "@/app/components/ExecutionCounter";
 
 const REFRESH_INTERVAL = 30_000;
 
@@ -98,15 +99,7 @@ export default function ActiveWorkOrdersPage() {
             Real-time pipeline for ICO Real Estate Group
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <span
-            className="inline-block w-1.5 h-1.5 rounded-full animate-pulse"
-            style={{ background: "var(--accent-emerald)" }}
-          />
-          <p className="text-xs" style={{ color: "var(--text-dim)" }}>
-            Auto-refreshes every 30s
-          </p>
-        </div>
+        <ExecutionCounter />
       </div>
 
       <StatsBar workOrders={workOrders} />
