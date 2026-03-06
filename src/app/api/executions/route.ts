@@ -5,6 +5,11 @@ export const dynamic = "force-dynamic";
 const N8N_API_URL = (process.env.N8N_API_URL || "https://jian123.app.n8n.cloud").trim();
 const N8N_API_KEY = (process.env.N8N_API_KEY || "").trim();
 const EXECUTION_LIMIT = parseInt(process.env.N8N_EXECUTION_LIMIT || "2500", 10);
+const ALERT_THRESHOLD = parseInt(process.env.N8N_ALERT_THRESHOLD || "2400", 10);
+const ALERT_WEBHOOK_URL = (process.env.N8N_ALERT_WEBHOOK_URL || "").trim();
+
+// Module-level dedup: only send one alert per month per serverless instance
+let lastAlertMonth = "";
 
 interface ExecutionItem {
   id: string;
@@ -62,6 +67,29 @@ export async function GET() {
 
   try {
     const used = await countExecutionsThisMonth();
+
+    // Send alert email if threshold crossed and not yet alerted this month
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    if (
+      used >= ALERT_THRESHOLD &&
+      ALERT_WEBHOOK_URL &&
+      lastAlertMonth !== currentMonth
+    ) {
+      lastAlertMonth = currentMonth;
+      fetch(ALERT_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          used,
+          limit: EXECUTION_LIMIT,
+          remaining: EXECUTION_LIMIT - used,
+          month: currentMonth,
+        }),
+      }).catch(() => {
+        // Don't block the response if alert fails
+      });
+    }
+
     return NextResponse.json({
       success: true,
       used,
